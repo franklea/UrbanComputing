@@ -66,6 +66,6 @@ public class Data {
 	public void printData(){
 		System.out.println(name);
 		System.out.println(poi);
-		System.out.println("\n"+x+" "+y);
+		System.out.println(x+" "+y);
 	}
 }

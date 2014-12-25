@@ -11,39 +11,11 @@ import java.util.Comparator;
 
 public class SimpleKdTree {
 
-	class Node {
-		public Node parent;
-		public Node leftChild;
-		public Node rightChild;
-		public Data data;
+	
+	
+	
+	KdNode root;
 
-		public Node(){}
-		
-		public Node(Data data) {
-			this.data = data;
-			parent = null;
-			leftChild = null;
-			rightChild = null;
-		}
-		
-		public Node(Data data, Node p, Node l, Node r) {
-			this.data = data;
-			parent = p;
-			leftChild = l;
-			rightChild = r;
-		}
-	}
-	
-	
-	Node root;
-	SimpleKdTree left;
-	SimpleKdTree right;
-	
-	SimpleKdTree(){
-		this.root.parent = null;
-		this.left = null;
-		this.right = null;
-	}
 
 	public int firstDim(ArrayList<Data> list) {
 		// x_avg;
@@ -101,73 +73,69 @@ public class SimpleKdTree {
 		return list;
 	}
 	
-	public Node buildTree(ArrayList<Data> list, int first_dim, Node root) {
+	public KdNode buildTree(ArrayList<Data> list, int first_dim) {
 	
 		if (list.isEmpty()){
 			return null;
 		}
 		
-		ArrayList<Data> sortedList = sortList(list,first_dim);
-		int index = sortedList.size()/2;
-		Data target = sortedList.get(index);
-		Node tNode = new Node(target);
-		sortedList.remove(index);
-		if (root == null){
-			root = tNode;
-		}else{
-			tNode.parent = root;
+		KdNode root = new KdNode();
+		if(list.size() == 1){
+			root.data = list.get(0);
+			return root;
 		}
+		
+		ArrayList<Data> sortedList = sortList(list,first_dim);
+		int median = sortedList.size()/2;
+		root.data = sortedList.get(median);
 		
 		ArrayList<Data> left = new ArrayList();
 		ArrayList<Data> right = new ArrayList();
-		for (int i = 0; i< index; i++)
+		for (int i = 0; i< median; i++)
 		{
 			left.add(sortedList.get(i));
 		}
-		for(int j = index+1; j< sortedList.size(); j++){
+		for(int j = median+1; j< sortedList.size(); j++){
 			right.add(sortedList.get(j));
 		}
 		
 		int newDim = (first_dim+1)%2;
 		
-		buildTree(left,newDim,tNode);
-		buildTree(right,newDim,tNode);
-		//buildSubTree(root, sortedList, first_dim);	
+		root.left = buildTree(left,newDim);
+		root.right = buildTree(right,newDim);
 		return root;
 	}
 
-	private void buildSubTree(Node parent, ArrayList<Data> list, int first_dim) {
-		
-
-		// TODO Auto-generated method stub
-		int dim = (first_dim+1) % 2;
-		list = sortList(list,dim);
-		int median = list.size()/2;
-		
-		
-	}
 
 	public void printList(ArrayList<Data> list){
 		for (Data d:list){
 			d.printData();
 		}
 	}
-	public Node findNode(double x, double y) {
+	public KdNode findNode(double x, double y) {
 		
 
 		return null;
 	}
 
-	public ArrayList<Node> NNQ(Node tree, double x, double y) {
-		ArrayList<Node> res = new ArrayList<Node>();
+	public ArrayList<KdNode> NNQ(KdNode tree, double x, double y) {
+		ArrayList<KdNode> res = new ArrayList<KdNode>();
 
 		return res;
 	}
 
-	public ArrayList<Node> SRQ(Node tree, double x, double y) {
-		ArrayList<Node> res = new ArrayList<Node>();
+	public ArrayList<KdNode> SRQ(KdNode tree, double x, double y) {
+		ArrayList<KdNode> res = new ArrayList<KdNode>();
 
 		return res;
 	}
 
+	public void printKdTree(KdNode root){
+		if (root != null){
+			root.data.printData();
+			System.out.println("=================");
+			printKdTree(root.left);
+			printKdTree(root.right);
+		}
+	}
 }

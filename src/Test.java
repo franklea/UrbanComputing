@@ -24,11 +24,9 @@ public class Test {
 		*/
 		SimpleKdTree kdTree = new SimpleKdTree();
 		int first_dim = kdTree.firstDim(res);
-		System.out.println("first_dim: "+ first_dim);
-		//kdTree.buildTree(res,first_dim);
-		
-		
-
+		//System.out.println("first_dim: "+ first_dim);
+		KdNode root = new KdNode();
+		root = kdTree.buildTree(res, first_dim);
+		kdTree.printKdTree(root);
 	}
-
 }
