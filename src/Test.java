@@ -13,7 +13,7 @@ public class Test {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String fileName = "F:\\workspace2\\UrbanComputing\\src\\sampledata.txt";
+		String fileName = "sampledata.txt";
 		ArrayList<Data> res = new ArrayList<Data>();
 		Data data = new Data();
 		res = data.readFromFile(fileName);

@@ -34,9 +34,15 @@ public class SimpleKdTree {
 		}
 	}
 	
+	
 	Node root;
+	SimpleKdTree left;
+	SimpleKdTree right;
+	
 	SimpleKdTree(){
-		this.root = new Node();
+		this.root.parent = null;
+		this.left = null;
+		this.right = null;
 	}
 
 	public int firstDim(ArrayList<Data> list) {
@@ -95,13 +101,22 @@ public class SimpleKdTree {
 		return list;
 	}
 	
-	public Node buildTree(ArrayList<Data> list, int first_dim) {
-		ArrayList<Data> sortedList = sortList(list,first_dim);
+	public Node buildTree(ArrayList<Data> list, int first_dim, Node root) {
+	
+		if (list.isEmpty()){
+			return null;
+		}
 		
+		ArrayList<Data> sortedList = sortList(list,first_dim);
 		int index = sortedList.size()/2;
 		Data target = sortedList.get(index);
-		Node root = new Node(target);
+		Node tNode = new Node(target);
 		sortedList.remove(index);
+		if (root == null){
+			root = tNode;
+		}else{
+			tNode.parent = root;
+		}
 		
 		ArrayList<Data> left = new ArrayList();
 		ArrayList<Data> right = new ArrayList();
@@ -112,8 +127,12 @@ public class SimpleKdTree {
 		for(int j = index+1; j< sortedList.size(); j++){
 			right.add(sortedList.get(j));
 		}
-		//buildSubTree(root, sortedList, first_dim);
 		
+		int newDim = (first_dim+1)%2;
+		
+		buildTree(left,newDim,tNode);
+		buildTree(right,newDim,tNode);
+		//buildSubTree(root, sortedList, first_dim);	
 		return root;
 	}
 
