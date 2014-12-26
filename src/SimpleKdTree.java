@@ -194,12 +194,17 @@ public class SimpleKdTree {
 	/*
 	 * Special Range Query
 	 */
-	public ArrayList<KdNode> SRQ(KdNode root, double range) {
+	
+	public ArrayList<KdNode> SRQ(KdNode root, double x, double y ,double range) {
 		ArrayList<KdNode> res = new ArrayList<KdNode>();
-		
+		Rectangle targetRec = new Rectangle(x-range,y-range,x+range,y+range);
+		if (root.left == null && root.right == null){
+			
+		}
 		
 		return res;
 	}
+	
 	
 	/*
 	 * use Euclidean distance

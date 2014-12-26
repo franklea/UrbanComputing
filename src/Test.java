@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -14,6 +15,19 @@ public class Test {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		String fileName = "sampledata.txt";
+		String poiFileName = "POIYP.xls";
+		
+		XlsParse parser = new XlsParse();
+		String[][] resPoi = null;
+		try {
+			resPoi = parser.readXls(poiFileName);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		parser.printRes(resPoi);
+		
+		
 		ArrayList<Data> res = new ArrayList<Data>();
 		Data data = new Data();
 		res = data.readFromFile(fileName);
