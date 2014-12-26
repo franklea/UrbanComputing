@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Stack;
 
 /**
  * Implemention of a 2-d KdTree
@@ -72,6 +73,7 @@ public class SimpleKdTree {
 	
 	public KdNode buildTree(ArrayList<Data> list/*, int first_dim*/) {
 		int first_dim = firstDim(list);
+		
 		if (list.isEmpty()){
 			return null;
 		}
@@ -79,6 +81,7 @@ public class SimpleKdTree {
 		KdNode root = new KdNode();
 		if(list.size() == 1){
 			root.data = list.get(0);
+			root.dim = first_dim;
 			return root;
 		}
 		
@@ -86,6 +89,7 @@ public class SimpleKdTree {
 		//printList(sortedList);
 		int median = sortedList.size()/2;
 		root.data = sortedList.get(median);
+		root.dim = first_dim;
 		
 		ArrayList<Data> left = new ArrayList();
 		ArrayList<Data> right = new ArrayList();
@@ -97,32 +101,113 @@ public class SimpleKdTree {
 			right.add(sortedList.get(j));
 		}
 		
-		//int newDim = (first_dim+1)%2;
-		
-		//root.left = buildTree(left,newDim);
-		//root.right = buildTree(right,newDim);
 		root.left = buildTree(left);
 		root.right = buildTree(right);
 		return root;
 	}
 
 
-	public KdNode findNode(double x, double y) {
-		
-
+	public KdNode findNode(KdNode root ,double x, double y) {
+		//dfs
+		if (root.data.x == x && root.data.y == y){
+			root.data.printData();
+			return root;
+		}else{
+			findNode(root.left,x,y);
+			findNode(root.right,x,y);
+		}
+		System.out.println("Not Found");
 		return null;
 	}
 
-	public ArrayList<KdNode> NNQ(KdNode tree, double x, double y) {
-		ArrayList<KdNode> res = new ArrayList<KdNode>();
-
-		return res;
+	/*
+	 * Nearedt Neighbour Query
+	 */
+	public KdNode NNQ(KdNode root, double x, double y) {
+		double dis = 0;
+		int currentDim = 0;
+		KdNode nearest = new KdNode();
+		Stack<KdNode> path = new Stack<KdNode>();
+		
+		if (root == null){
+			System.out.println("Tree is empty!");
+			return null;
+		}
+		
+		nearest = root;
+		while(root != null){
+			path.push(root);
+			currentDim = root.dim;
+			if (currentDim == 0){
+				if (x <= root.data.x){
+					root = root.left;
+				}else{
+					root = root.right;
+				}
+			}else if(currentDim == 1){
+				if (y <= root.data.y){
+					root = root.left;
+				}else{
+					root = root.right;
+				}
+			}
+		}
+		
+		nearest = path.pop();	
+	//	nearest.data.printData();
+		double tmpMinDis = distance(nearest,x,y);
+		double minDis = 0;
+	//	System.out.println(Max_dis);
+		
+		//backtrack
+		KdNode backNode = new KdNode();
+		while (!path.isEmpty()){
+			backNode = path.pop();
+			currentDim = backNode.dim;
+			if (distance(backNode,x,y) < tmpMinDis){
+				if(currentDim == 0){
+					if (x <= backNode.data.x){
+						root = backNode.right;
+					}else {
+						root = backNode.left;
+					}
+				}else if (currentDim == 1){
+					if (y <= backNode.data.y){
+						root = backNode.right;
+					}else{
+						root = backNode.left;
+					}
+				}
+				path.push(root);
+			
+				if(distance(nearest,x,y) > distance(root,x,y)){
+					nearest = root;
+					tmpMinDis = distance(root,x,y);
+				}
+			}
+			
+		}
+		
+		return nearest;
 	}
 
-	public ArrayList<KdNode> SRQ(KdNode tree, double x, double y) {
+	/*
+	 * Special Range Query
+	 */
+	public ArrayList<KdNode> SRQ(KdNode root, double range) {
 		ArrayList<KdNode> res = new ArrayList<KdNode>();
-
+		
+		
 		return res;
+	}
+	
+	/*
+	 * use Euclidean distance
+	 */
+	public double distance(KdNode node1,double x, double y){
+		double dis = 0;
+		dis = Math.sqrt(Math.pow(node1.data.x-x,2)+Math.pow(node1.data.y-y, 2));
+		return dis;
 	}
 	
 	public void printList(ArrayList<Data> list){
@@ -134,6 +219,7 @@ public class SimpleKdTree {
 	public void printKdTree(KdNode root){
 		if (root != null){
 			root.data.printData();
+			System.out.println(root.dim);
 			System.out.println("=================");
 			printKdTree(root.left);
 			printKdTree(root.right);

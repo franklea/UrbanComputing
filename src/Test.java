@@ -28,6 +28,9 @@ public class Test {
 		KdNode root = new KdNode();
 		//root = kdTree.buildTree(res, first_dim);
 		root = kdTree.buildTree(res);
-		kdTree.printKdTree(root);
+		//kdTree.printKdTree(root);
+		KdNode nearest = new KdNode();
+		nearest = kdTree.NNQ(root, 2, 4.5);
+		nearest.data.printData();
 	}
 }
