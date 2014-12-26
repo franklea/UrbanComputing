@@ -3,11 +3,15 @@ class KdNode {
 		public KdNode right;
 		public Data data;
 
-		public KdNode(){}
+		public KdNode(){
+			this.data = null;
+			this.left = null;
+			this.right = null;
+		}
 		
 		public KdNode(Data data) {
 			this.data = data;
-			left = null;
-			right= null;
+			this.left = null;
+			this.right= null;
 		}
 	}

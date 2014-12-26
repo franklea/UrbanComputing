@@ -9,10 +9,7 @@ import java.util.Comparator;
  *
  */
 
-public class SimpleKdTree {
-
-	
-	
+public class SimpleKdTree {	
 	
 	KdNode root;
 
@@ -68,13 +65,13 @@ public class SimpleKdTree {
 		if (dim == 0 /*x_dim*/){
 			Collections.sort(list, comparator_x);
 		}else if (dim == 1 /*y_dim*/){
-			Collections.sort(list, comparator_x);
+			Collections.sort(list, comparator_y);
 		}
 		return list;
 	}
 	
-	public KdNode buildTree(ArrayList<Data> list, int first_dim) {
-	
+	public KdNode buildTree(ArrayList<Data> list/*, int first_dim*/) {
+		int first_dim = firstDim(list);
 		if (list.isEmpty()){
 			return null;
 		}
@@ -86,6 +83,7 @@ public class SimpleKdTree {
 		}
 		
 		ArrayList<Data> sortedList = sortList(list,first_dim);
+		//printList(sortedList);
 		int median = sortedList.size()/2;
 		root.data = sortedList.get(median);
 		
@@ -99,19 +97,16 @@ public class SimpleKdTree {
 			right.add(sortedList.get(j));
 		}
 		
-		int newDim = (first_dim+1)%2;
+		//int newDim = (first_dim+1)%2;
 		
-		root.left = buildTree(left,newDim);
-		root.right = buildTree(right,newDim);
+		//root.left = buildTree(left,newDim);
+		//root.right = buildTree(right,newDim);
+		root.left = buildTree(left);
+		root.right = buildTree(right);
 		return root;
 	}
 
 
-	public void printList(ArrayList<Data> list){
-		for (Data d:list){
-			d.printData();
-		}
-	}
 	public KdNode findNode(double x, double y) {
 		
 
@@ -129,7 +124,13 @@ public class SimpleKdTree {
 
 		return res;
 	}
-
+	
+	public void printList(ArrayList<Data> list){
+		for (Data d:list){
+			d.printData();
+		}
+	}
+	
 	public void printKdTree(KdNode root){
 		if (root != null){
 			root.data.printData();
